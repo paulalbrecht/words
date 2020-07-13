@@ -1,0 +1,4 @@
+Basic api that can be run out of a virtualenv. Pip install -r requirements.txt for the basic installation. python manage.py runserver
+
+Books are loaded via a migration. Database design consideratons were to keep it simple considering the data source.
+
