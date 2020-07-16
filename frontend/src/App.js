@@ -3,32 +3,52 @@ import axios from 'axios';
 import './App.css';
 
 class App extends Component {
-  
- state = {
+  state = {
     recommendations: []
   }
 
   componentDidMount() {
-    axios.get(`http://127.0.0.1:8000/recommendations/api/v1/count/3/`)
+    axios.get('http://127.0.0.1:8000/recommendations/api/v1/count/')
       .then(res => {
-        const recommendations = res.data.results;
-        this.setState({ recommendations });
+        const recommendations = res.data;
+        this.setState({recommendations});
       })
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const no_recommendations = {
+      number: this.state.number
+    }
+    console.log('Number of recommendations');
+    console.log(no_recommendations.number);
+    console.log('http://127.0.0.1:8000/recommendations/api/v1/count/' + no_recommendations.number);
+    axios.get('http://127.0.0.1:8000/recommendations/api/v1/count/' + no_recommendations.number + '/')
+      .then(res => {
+        const recommendations = res.data;
+        this.setState({recommendations});
+    })
+  }
+
+  handleChange = event =>{
+    this.setState({ number: event.target.value});
   }
 
   render() {
     return (
-      <div className="App">
-        <p className="App-intro">
-            <h2>Grab list of books from the API and display it</h2>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label> Number Of recommendations?:
+            <input type="text" name="number" onChange={this.handleChange}/>
+          </label>
+          <button type="submit">Add</button>
+        </form>
 
-      <ul>
-        { this.state.recommendations.map(recommendation => <li>{recommendations.title}</li>)}
-      </ul>
-        </p>
+        <ul>
+          { this.state.recommendations.map(recommendation => <li>{recommendation.title}</li>)}
+        </ul>
       </div>
-    );
+    )
   }
 }
-
 export default App;
